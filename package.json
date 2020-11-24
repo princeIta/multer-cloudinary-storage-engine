@@ -1,7 +1,7 @@
 {
   "name": "multer-cloudinary-storage-engine",
   "version": "1.0.0",
-  "description": "A storage engine for multer that uploads files straight to your cloudinary account",
+  "description": "A storage engine for multer that uploads files straight to your cloudinary dashboard",
   "main": "index.js",
   "author": "Prince Ita",
   "license": "MIT",

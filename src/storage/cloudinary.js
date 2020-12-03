@@ -9,7 +9,13 @@ function getDestination(_req, _file, cb) {
 }
 
 function CloudinaryStorage(opts) {
-	this.getFilename = opts.filename || getFilename;
+	if (typeof opts.filename === "string") {
+		this.getFilename = function (_req, _file, cb) {
+			cb(null, opts.filename);
+		};
+	} else {
+		this.getFilename = opts.filename || getFilename;
+	}
 
 	if (typeof opts.destination === "string") {
 		this.getDestination = function (_req, _file, cb) {
@@ -36,7 +42,8 @@ CloudinaryStorage.prototype._cloudinary = cloudinary;
 
 CloudinaryStorage.prototype._handleFile = function _handleFile(req, file, cb) {
 	const _cloudinary = this._cloudinary;
-	this.getDestination(req, file, function (err, destination) {
+
+	this.getDestination(req, file, (err, destination) => {
 		if (err) return cb(err);
 
 		const uploadOptions = { resource_type: "auto" };
@@ -45,7 +52,7 @@ CloudinaryStorage.prototype._handleFile = function _handleFile(req, file, cb) {
 			Object.assign(uploadOptions, destination);
 		}
 
-		this.getFilename(req, file, function (err, filename) {
+		this.getFilename(req, file, (err, filename) => {
 			if (err) return cb(err);
 
 			if (filename) {
@@ -54,7 +61,7 @@ CloudinaryStorage.prototype._handleFile = function _handleFile(req, file, cb) {
 
 			const uploadStream = _cloudinary.uploader.upload_stream(
 				uploadOptions,
-				function cb(err, result) {
+				(err, result) => {
 					if (err) return cb(err);
 
 					cb(null, result);
